@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
+  <script src="https://sdk.altvr.com/libs/altspace.js/2.4.1/altspace.min.js"></script>
+  <script>
+    // n-skeleton-parent only works with root meshes at the moment. Since most model loaders use a root
+    // container object, we need to collapse the model so that n-skeleton-parent can access the mesh directly.
+    AFRAME.registerComponent('collapse-model', {
+        init: function () {
+            this.el.addEventListener('model-loaded', function () {
+                this.el.object3DMap.mesh.updateMatrixWorld();
+                var mesh;
+                this.el.object3DMap.mesh.traverse(function (obj) {
+                    if (!mesh && obj instanceof THREE.Mesh) {
+                        mesh = obj;
+                    }
+                }.bind(this))
+                if (mesh) {
+                    mesh.scale.copy(mesh.getWorldScale());
+                    this.el.setObject3D('mesh', mesh);
+                    // setObject3D emits this event in a-frame 0.4.0
+                    this.el.emit('object3dset', {
+                        type: 'mesh'
+                    });
+                }
+            }.bind(this));
+        }
+    });
+  </script>
+  <script>
+    altspace.getThreeJSTrackingSkeleton().then(function (skeleton) {
+          window.head = skeleton.getJoint('Head');
+        });
+        AFRAME.registerComponent('altspace-look-at', {
+          init: function () {
+            if (!window.altspace || !altspace.inClient) { return; }
+          },
+          tick: function () {
+            if (!window.head || !this.el.object3D) { return; }
+            this.el.object3D.lookAt(window.head.position); 
+          }
+        })
+  </script>
+  <body>
+    <a-scene altspace=fullspace:true sync-system="author: bookgirl; app: hunted house">
+      <a-assets>
+ 
+        <a-asset-item id="b-mic" src="https://rawgit.com/Lia021/hunted-birthday/master/b-mic/b-mic.dae"></a-asset-item>
+        
+        <a-asset-item id="fae-mic" src="https://rawgit.com/Lia021/model/master/mic/mic4.dae"></a-asset-item>
+     
+     
+
+        <a-mixin id="b-mic" collada-model="#b-mic" collapse-model></a-mixin>
+
+        <a-mixin id="parent-to-right-hand" position="-0.12 -0.02 -0.09" rotation="-90 90 0" n-skeleton-parent="part: hand; side: right;" sync sync-n-skeleton-parent></a-mixin>
+
+       
+    
+    
+      </a-assets>
+
+      <!--model 1-->
+
+      <a-entity position="-2.54 1.35 -5.90" mixin="b-mic" rotation="90 0 0" instantiator="on: click;group: b-mic; mixin: b-mic parent-to-right-hand"></a-entity>
+
+    
+      
+  
+<script id="jsbin-source-html" type="text/html"><!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://aframe.io/releases/0.3.0/aframe.min.js"><\/script>
+  <script src="https://sdk.altvr.com/libs/altspace.js/2.4.1/altspace.min.js"><\/script>
+  <script>
+    // n-skeleton-parent only works with root meshes at the moment. Since most model loaders use a root
+    // container object, we need to collapse the model so that n-skeleton-parent can access the mesh directly.
+    AFRAME.registerComponent('collapse-model', {
+        init: function () {
+            this.el.addEventListener('model-loaded', function () {
+                this.el.object3DMap.mesh.updateMatrixWorld();
+                var mesh;
+                this.el.object3DMap.mesh.traverse(function (obj) {
+                    if (!mesh && obj instanceof THREE.Mesh) {
+                        mesh = obj;
+                    }
+                }.bind(this))
+                if (mesh) {
+                    mesh.scale.copy(mesh.getWorldScale());
+                    this.el.setObject3D('mesh', mesh);
+                    // setObject3D emits this event in a-frame 0.4.0
+                    this.el.emit('object3dset', {
+                        type: 'mesh'
+                    });
+                }
+            }.bind(this));
+        }
+    });
+  <\/script>
+  <script>
+    altspace.getThreeJSTrackingSkeleton().then(function (skeleton) {
+          window.head = skeleton.getJoint('Head');
+        });
+        AFRAME.registerComponent('altspace-look-at', {
+          init: function () {
+            if (!window.altspace || !altspace.inClient) { return; }
+          },
+          tick: function () {
+            if (!window.head || !this.el.object3D) { return; }
+            this.el.object3D.lookAt(window.head.position); 
+          }
+        })
+  <\/script>
+  <body>
+    <a-scene altspace=fullspace:true sync-system="author: bookgirl; app: hunted house">
+      <a-assets>
+ 
+        <a-asset-item id="b-mic" src="https://rawgit.com/Lia021/hunted-birthday/master/b-mic/b-mic.dae"></a-asset-item>
+        
+        <a-asset-item id="fae-mic" src="https://rawgit.com/Lia021/model/master/mic/mic4.dae"></a-asset-item>
+     
+     
+
+        <a-mixin id="b-mic" collada-model="#b-mic" collapse-model></a-mixin>
+
+        <a-mixin id="parent-to-right-hand" position="-0.12 -0.02 -0.09" rotation="-90 90 0" n-skeleton-parent="part: hand; side: right;" sync sync-n-skeleton-parent></a-mixin>
+
+       
+    
+    
+      </a-assets>
+
+      <\!--model 1-->
+
+      <a-entity position="-2.54 1.35 -5.90" mixin="b-mic" rotation="90 0 0" instantiator="on: click;group: b-mic; mixin: b-mic parent-to-right-hand"></a-entity>
+
+    
+      
+  </body>
+
+</html>
+</script>
+
+</body>
+
+</html>
